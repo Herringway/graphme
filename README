@@ -1,0 +1,55 @@
+Graph me: A river-crossing problem solver.
+This program is designed to solve river-crossing problems. That is, it solves
+problems where a group of items must be transported across a river two at a
+time.
+
+By default, it solves the Wolf, Goat and Cabbage problem, the Contagion
+problem, and the Bridge and Torch problem.
+
+In the Wolf, Goat and Cabbage problem, there is a farmer, a wolf, a goat, and
+some cabbage trying to cross a river. The Wolf and Goat must not be left alone
+with each other, nor can the Goat and Cabbage be left alone with each other.
+In these states, one will eat the other and the game is lost.
+
+In the Contagion problem, there are three infected patients and three doctors.
+If the number of patients exceeds the number of doctors on any side, the
+doctors will be attacked and the game is over.
+
+In the Bridge and Torch problem, there are four people trying to cross a
+bridge sharing a single torch. The only limitation in this problem is that
+the torch will only last 15 minutes and each of the four people travel across
+at a different rate. Once the torch goes out, the game is lost.
+
+On reasonably posix-compliant systems, this program may be executed simply by
+invoking it by name. On other systems, it will be necessary to explicitly
+run the python 2 interpreter.
+
+On Linux, OS X, etc: ./graphme.py
+On Windows: python graphme.py
+
+
+
+Technical details:
+This program makes use of a breadth-first search algorithm in order to find
+shorter paths sooner. This will not find the solution with the lowest weight
+when non-uniform weights are involved, but it should find the solution with
+the fewest mutations necessary. The program uses forward-chaining, though
+it can be changed to use backward-chaining trivially. However, this should have
+little effect on the execution of the program.
+
+The trace for the Wolf, Goat, and Cabbage problem is as follows:
+1 [Near, Near, Near, Near]
+2 [Near, Far, Near, Far]
+3 [Near, Far, Near, Near]
+4 [Far, Far, Near, Far]
+5 [Near, Far, Far, Far] (backtrack to 4)
+6 [Far, Near, Near, Near]
+7 [Near, Near, Far, Near] (backtrack to 6)
+8 [Far, Near, Far, Far]
+9 [Far, Near, Far, Far] (backtrack to 8)
+a [Near, Near, Far, Near] (backtrack to 8)
+b [Far, Near, Far, Near] (backtrack to 8)
+c [Far, Near, Near, Near] (backtrack to 8)
+d [Far, Near, Far, Near]
+e [Near, Far, Far, Far] (backtrack to d)
+f [Far, Far, Far, Far] (complete!)
