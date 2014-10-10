@@ -1,12 +1,12 @@
 #!/usr/bin/python2
 
 import operator
-def graphme(numgroups, losestates, groupweights, verify = lambda v,w,x,y,z: True, maxval = 40, victoryverify = lambda a: len(a) == len(list(filter(None, a))), threemove = False):
+def graphme(numgroups, losestates, groupweights, verify = lambda v,w,x,y,z: True, maxval = 40, victoryverify = lambda a: len(a) == len(list(filter(None, a))), numbermoving = 2):
 	"""Programmer-friendly interface to the graph searching algorithm"""
 	assert numgroups == len(groupweights)
-	return graphmeup([False]*numgroups, losestates, groupweights, verify, maxval, victoryverify, threemove)
+	return graphmeup([False]*numgroups, losestates, groupweights, verify, maxval, victoryverify, numbermoving)
 
-def graphmeup(state, losestates, groupweights, verify, maxval, victoryverify, threemove):
+def graphmeup(state, losestates, groupweights, verify, maxval, victoryverify, numbermoving):
 	"""Searches for and returns a solution required to move all items across the river."""
 	backtracks = 0
 	searchedstates = 0
@@ -17,7 +17,7 @@ def graphmeup(state, losestates, groupweights, verify, maxval, victoryverify, th
 		node = path[-1] #the current state will be at the tail
 		if victoryverify(node) and totalweight <= maxval:
 			return (totalweight, path, backtracks, searchedstates)
-		for (permutation, weight) in permute(verify, list(node), groupweights, threemove):
+		for (permutation, weight) in permute(verify, list(node), groupweights, numbermoving):
 			if (permutation in path or
 			 totalweight > maxval or
 			 permutation in losestates or
@@ -32,14 +32,14 @@ def graphmeup(state, losestates, groupweights, verify, maxval, victoryverify, th
 def invertgroup(group):
 	"""Flip all the values in the specified group and return it"""
 	return map(operator.not_, group)
-def permute(verify, state, weights, depth3 = False):
+def permute(verify, state, weights, changes = 2):
 	"""Generates possible next states for river crossing problems"""
 	for i in range(len(state)):
 		statecopy = list(state)
 		statecopy[i] = not(state[i])
 		for j in range(i+1, len(state)):
 			statecopy[j] = not(state[j])
-			if depth3:
+			if changes == 3:
 				for k in range(j+1, len(state)):
 					statecopy[k] = not(state[k])
 					if verify(state, statecopy, i, j, k):
@@ -79,7 +79,7 @@ def main():
 		[False, True, True, True, False, False],
 		[False, True, True, False, True, False],
 		[False, True, True, False, False, True]], [1,1,1,1,1,1]))
-	prettyprint(graphme(5, [], [1,2,5,8,1], maxval = 15, verify = lambda x, y, w, z, v: (x[-1] != y[-1]) and (y[v] == y[w] == y[z] == y[-1]) and ((w != z) or (w != v) or (z != v)), threemove=True))
+	prettyprint(graphme(5, [], [1,2,5,8,1], maxval = 15, verify = lambda x, y, w, z, v: (x[-1] != y[-1]) and (y[v] == y[w] == y[z] == y[-1]) and ((w != z) or (w != v) or (z != v)), numbermoving=3))
 
 if __name__ == "__main__":
     main()
