@@ -1,5 +1,6 @@
 #!/usr/bin/python2
 
+#Written by Cameron Ross
 import operator
 def graphme(numgroups, losestates, groupweights, 
 	verify = lambda v,w,x,y,z: True,
